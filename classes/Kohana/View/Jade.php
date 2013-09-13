@@ -46,8 +46,13 @@ class Kohana_View_Jade {
       $template = $this->template;
     }
 
-    $fn = APPPATH.$this->path.$template.'.jade';
-    $cache_fn = APPPATH.'cache/'.$this->cache_path.$template.'.php';
+    $fn = Kohana::find_file('views', $template, 'jade');
+    $path = APPPATH.'cache/'.$this->cache_path;
+    if(!file_exists($path))
+    {
+      mkdir($path);
+    }
+    $cache_fn = $path.str_replace('/','--', $template).'.php';
 
     if(!file_exists($cache_fn) 
         OR time() > filemtime($cache_fn) + 5) // 5 sec
@@ -77,5 +82,10 @@ class Kohana_View_Jade {
   function __get($key)
   {
     return $this->vars[$key];
+  }
+  
+  public function __toString()
+  {
+    return $this->render();
   }
 }
