@@ -34,7 +34,13 @@ class Kohana_View_Jade {
     foreach($vars as $k => $v){
       ${$k} = $v;
     }
-    require_once($jade);
+    try {
+      //ob_start(function(){ });
+      require_once($jade);
+    } catch(Exception $e){
+      var_dump($e);
+      //ob_end_flush();
+    }
   }
 
   function render($template=NULL)
